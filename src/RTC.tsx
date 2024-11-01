@@ -1,18 +1,16 @@
-// RTC.tsx
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 
 interface RTCProps {
-    handleVisionResult: (detectedObjects: any[]) => void;  // Function to pass detected objects to parent
-  }
+  handleVisionResult: (detectedObjects: any[]) => void;  // Function to pass detected objects to parent
+  matchedByPolygon: any[];  // Pass the objects matched by polygon check to stop the loop
+}
 
-
-const RTC: React.FC<RTCProps> = ({ handleVisionResult }) => {
+const RTC: React.FC<RTCProps> = ({ handleVisionResult, matchedByPolygon }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [detectedObjects, setDetectedObjects] = useState<any[]>([]);
-  
-
+  const [captureInterval, setCaptureInterval] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     // Access the webcam
@@ -30,6 +28,16 @@ const RTC: React.FC<RTCProps> = ({ handleVisionResult }) => {
     getMedia();
   }, []);
 
+  useEffect(() => {
+    if (matchedByPolygon.length > 0) {
+      // Stop the loop when the object is centered and covers 75% of the box
+      if (captureInterval) {
+        clearInterval(captureInterval);
+        console.log("Loop has stopped because object is close enough and centered.");
+      }
+    }
+  }, [matchedByPolygon, captureInterval]);
+
   // Capture image from video stream
   const captureImage = () => {
     if (!videoRef.current) return;
@@ -45,12 +53,9 @@ const RTC: React.FC<RTCProps> = ({ handleVisionResult }) => {
       const imageData = canvas.toDataURL('image/png');  // Base64 image
       setCapturedImage(imageData);  // Store captured image in state
       return imageData;
-      
     }
     return null;
   };
-
-
 
   // Send captured image to the backend for object detection
   const sendToVisionAPI = async () => {
@@ -62,10 +67,17 @@ const RTC: React.FC<RTCProps> = ({ handleVisionResult }) => {
         });
         const objects = response.data;  // Store detected objects
         setDetectedObjects(objects);
-        handleVisionResult(objects);  // Pass detected objects to the parent component // Store detected objects
+        handleVisionResult(objects);  // Pass detected objects to the parent component
       } catch (error) {
         console.error('Error sending image to backend:', error);
       }
+    }
+  };
+
+  const startCaptureLoop = () => {
+    if (!captureInterval) {
+      const interval = setInterval(sendToVisionAPI, 2000); // Capture every 2 seconds
+      setCaptureInterval(interval);
     }
   };
 
@@ -73,7 +85,7 @@ const RTC: React.FC<RTCProps> = ({ handleVisionResult }) => {
     <div>
       <video ref={videoRef} autoPlay playsInline style={{ width: '100%' }} />
       <br />
-      <button onClick={sendToVisionAPI}>Capture and Analyze</button>
+      <button onClick={startCaptureLoop}>Start Capture Loop</button>
       {capturedImage && <img src={capturedImage} alt="Captured" style={{ width: '100%' }} />}
       {detectedObjects.length > 0 && (
         <div>

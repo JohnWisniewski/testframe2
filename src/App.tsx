@@ -21,23 +21,21 @@ function App() {
   const [matchedObjects, setMatchedObjects] = useState<DetectedObject[]>([]);
   const [matchedByPolygon, setMatchedByPolygon] = useState<DetectedObject[]>([]);
 
-//height and width just for texting
-  // in the future we can put a element to get the users camera width and heigh because all cameras are different
   const imageWidth = 640; // Assume image/video width
   const imageHeight = 480;
 
- // Central bounding box as a preset polygon (replace with your actual central box polygon)
- const centralBox: Point[] = [
-  { x: 0.4, y: 0.4 },
-  { x: 0.6, y: 0.4 },
-  { x: 0.6, y: 0.6 },
-  { x: 0.4, y: 0.6 }
-];
+  // Central bounding box as a preset polygon (replace with your actual central box polygon)
+  const centralBox: Point[] = [
+    { x: 0.4, y: 0.4 },
+    { x: 0.6, y: 0.4 },
+    { x: 0.6, y: 0.6 },
+    { x: 0.4, y: 0.6 }
+  ];
 
-const imageCenter = {
-  x: imageWidth / 2,
-  y: imageHeight / 2,
-};
+  const imageCenter = {
+    x: imageWidth / 2,
+    y: imageHeight / 2,
+  };
 
   // Handle detected objects
   const handleVisionResult = (objects: DetectedObject[]) => {
@@ -55,12 +53,12 @@ const imageCenter = {
   const compareObjectsAndSpeech = (objects: DetectedObject[], speechText: string) => {
     const matches = objects.filter((obj) =>
       speechText.toLowerCase().includes(obj.name.toLowerCase())
-    
     );
-    
+
     setMatchedObjects(matches);
     checkPolygonMatches(matches);
   };
+
   const checkPolygonMatches = (matchedBySpeech: DetectedObject[]) => {
     const polygonMatches = matchedBySpeech.filter((obj) => {
       const polygon = obj.boundingPoly.normalizedVertices;
@@ -69,13 +67,12 @@ const imageCenter = {
     setMatchedByPolygon(polygonMatches); // Store objects matched by polygon comparison
   };
 
-
   return (
     <div className="App">
       <header className="App-header">
         <h1>Frame your photo perfectly!</h1>
 
-        <RTC handleVisionResult={handleVisionResult} />
+        <RTC handleVisionResult={handleVisionResult} matchedByPolygon={matchedByPolygon} />
 
         <SpeechToText handleTranscript={handleTranscript} />
 
@@ -118,9 +115,7 @@ const imageCenter = {
           </div>
         )}
 
-
-        
-                {matchedByPolygon.length > 0 && (
+        {matchedByPolygon.length > 0 && (
           <div>
             <h2>Objects Covering 75% of Central Box:</h2>
             <ul>
@@ -141,8 +136,6 @@ const imageCenter = {
             </ul>
           </div>
         )}
-
-
       </header>
     </div>
   );
