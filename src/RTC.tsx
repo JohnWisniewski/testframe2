@@ -62,7 +62,7 @@ const RTC: React.FC<RTCProps> = ({ handleVisionResult, matchedByPolygon }) => {
     const image = captureImage();
     if (image) {
       try {
-        const response = await axios.post('http://localhost:5001/api/detectObjects', {
+        const response = await axios.post('http://128.4.101.31:5001/api/detectObjects', {
           image,
         });
         const objects = response.data;  // Store detected objects
