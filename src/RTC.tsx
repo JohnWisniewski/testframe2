@@ -28,7 +28,7 @@ const RTC: React.FC<RTCProps> = ({ handleVisionResult, matchedByPolygon }) => {
     getMedia();
   }, []);
 
-  /*useEffect(() => {
+  useEffect(() => {
     if (matchedByPolygon.length > 0) {
       // Stop the loop when the object is centered and covers 75% of the box
       if (captureInterval) {
@@ -36,7 +36,7 @@ const RTC: React.FC<RTCProps> = ({ handleVisionResult, matchedByPolygon }) => {
         console.log("Loop has stopped because object is close enough and centered.");
       }
     }
-  }, [matchedByPolygon, captureInterval]);*/
+  }, [matchedByPolygon, captureInterval]);
 
   // Capture image from video stream
   const captureImage = () => {
