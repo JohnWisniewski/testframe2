@@ -7,7 +7,7 @@ import DetectedObjectsPage from './pages/DetectedObjectsPage';
 
 function App() {
   return (
-    <Router>
+    <Router basename="/testframe2">
        
       <div className="App">
         <header className="App-header">
