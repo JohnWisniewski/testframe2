@@ -54,7 +54,7 @@ const RTC = forwardRef<any, RTCProps>(({ handleVisionResult }, ref) => {
         const response = await axios.post('https://testframe2-onyt.onrender.com/api/detectObjects', {
           image,
         });
-        const objects = response.data;
+        const objects = response.data as any[];
         setDetectedObjects(objects);
         handleVisionResult(objects);
       } catch (error) {
