@@ -8,6 +8,7 @@ import DetectedObjectsPage from './pages/DetectedObjectsPage';
 function App() {
   return (
     <Router>
+       <Router basename="/testframe2"></Router>
       <div className="App">
         <header className="App-header">
           <Routes>
