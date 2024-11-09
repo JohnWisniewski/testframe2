@@ -1,22 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react';
+// src/RTC.tsx
+import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } from 'react';
 import axios from 'axios';
 
 interface RTCProps {
-  handleVisionResult: (detectedObjects: any[]) => void;  // Function to pass detected objects to parent
-  matchedByPolygon: any[];  // Pass the objects matched by polygon check to stop the loop
+  handleVisionResult: (detectedObjects: any[]) => void;
 }
 
-const RTC: React.FC<RTCProps> = ({ handleVisionResult, matchedByPolygon }) => {
+const RTC = forwardRef<any, RTCProps>(({ handleVisionResult }, ref) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [detectedObjects, setDetectedObjects] = useState<any[]>([]);
-  const [captureInterval, setCaptureInterval] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     // Access the webcam
     const getMedia = async () => {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }});
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
         }
@@ -28,19 +27,9 @@ const RTC: React.FC<RTCProps> = ({ handleVisionResult, matchedByPolygon }) => {
     getMedia();
   }, []);
 
-  useEffect(() => {
-    if (matchedByPolygon.length > 0) {
-      // Stop the loop when the object is centered and covers 75% of the box
-      if (captureInterval) {
-        clearInterval(captureInterval);
-        console.log("Loop has stopped because object is close enough and centered.");
-      }
-    }
-  }, [matchedByPolygon, captureInterval]);
-
   // Capture image from video stream
   const captureImage = () => {
-    if (!videoRef.current) return;
+    if (!videoRef.current) return null;
 
     const video = videoRef.current;
     const canvas = document.createElement('canvas');
@@ -50,8 +39,8 @@ const RTC: React.FC<RTCProps> = ({ handleVisionResult, matchedByPolygon }) => {
     const ctx = canvas.getContext('2d');
     if (ctx) {
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-      const imageData = canvas.toDataURL('image/png');  // Base64 image
-      setCapturedImage(imageData);  // Store captured image in state
+      const imageData = canvas.toDataURL('image/png'); // Base64 image
+      setCapturedImage(imageData);
       return imageData;
     }
     return null;
@@ -65,28 +54,42 @@ const RTC: React.FC<RTCProps> = ({ handleVisionResult, matchedByPolygon }) => {
         const response = await axios.post('https://testframe2-onyt.onrender.com/api/detectObjects', {
           image,
         });
-        const objects = response.data;  // Store detected objects
+        const objects = response.data;
         setDetectedObjects(objects);
-        handleVisionResult(objects);  // Pass detected objects to the parent component
+        handleVisionResult(objects);
       } catch (error) {
         console.error('Error sending image to backend:', error);
       }
     }
   };
 
-  const startCaptureLoop = () => {
-    if (!captureInterval) {
-      const interval = setInterval(sendToVisionAPI, 2000); // Capture every 2 seconds
-      setCaptureInterval(interval);
+  const getImageDimensions = () => {
+    if (videoRef.current) {
+      return {
+        width: videoRef.current.videoWidth,
+        height: videoRef.current.videoHeight,
+      };
     }
+    return { width: 0, height: 0 };
   };
 
+  // Use useImperativeHandle to expose sendToVisionAPI to the parent component
+  useImperativeHandle(ref, () => ({
+    sendToVisionAPI,
+    getImageDimensions,
+  }));
+
   return (
-    <div>
+<div style={{ display: 'flex', gap: '20px' }}>
+    {/* Video feed */}
+    <div style={{ flex: 1 }}>
       <video ref={videoRef} autoPlay playsInline style={{ width: '100%' }} />
-      <br />
-      <button onClick={startCaptureLoop}>Start Capture Loop</button>
+    </div>
+
+    {/* Captured image and detected objects */}
+    <div style={{ flex: 1 }}>
       {capturedImage && <img src={capturedImage} alt="Captured" style={{ width: '100%' }} />}
+      
       {detectedObjects.length > 0 && (
         <div>
           <h3>Detected Objects:</h3>
@@ -95,21 +98,15 @@ const RTC: React.FC<RTCProps> = ({ handleVisionResult, matchedByPolygon }) => {
               <li key={index}>
                 {obj.name} - Confidence: {Math.round(obj.score * 100)}%
                 <br />
-                <strong>Bounding Box Coordinates:</strong>
-                <ul>
-                  {obj.boundingPoly.normalizedVertices.map((vertex: any, vIndex: number) => (
-                    <li key={vIndex}>
-                      x: {vertex.x}, y: {vertex.y}
-                    </li>
-                  ))}
-                </ul>
               </li>
             ))}
           </ul>
         </div>
       )}
     </div>
-  );
-};
+  </div>
+);
+});
 
 export default RTC;
+
