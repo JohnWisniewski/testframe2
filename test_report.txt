@@ -33,17 +33,17 @@ FAIL src/App.test.tsx
 
     SyntaxError: Unexpected token 'export'
 
-      3 | [36mimport[39m [33mReact[39m [36mfrom[39m [32m'react'[39m[33m;[39m
-      4 | [36mimport[39m { [33mLink[39m } [36mfrom[39m [32m'react-router-dom'[39m[33m;[39m
-    > 5 | [36mimport[39m { motion } [36mfrom[39m [32m'framer-motion'[39m[33m;[39m
-        | ^
-      6 | [36mimport[39m styled[33m,[39m { [33mThemeProvider[39m[33m,[39m createGlobalStyle } [36mfrom[39m [32m'styled-components'[39m[33m;[39m
-      7 | [36mimport[39m { [33mFaArrowRight[39m[33m,[39m [33mFaMoon[39m[33m,[39m [33mFaSun[39m } [36mfrom[39m [32m'react-icons/fa'[39m[33m;[39m
-      8 | [90m// import axios from 'axios';[39m
+    [0m [90m 2 |[39m [36mimport[39m { useNavigate } [36mfrom[39m [32m'react-router-dom'[39m[33m;[39m
+     [90m 3 |[39m [36mimport[39m [33mReact[39m[33m,[39m { useState } [36mfrom[39m [32m'react'[39m[33m;[39m
+    [31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m { motion } [36mfrom[39m [32m'framer-motion'[39m[33m;[39m
+     [90m   |[39m [31m[1m^[22m[39m
+     [90m 5 |[39m [36mimport[39m styled[33m,[39m { [33mThemeProvider[39m[33m,[39m createGlobalStyle } [36mfrom[39m [32m'styled-components'[39m[33m;[39m
+     [90m 6 |[39m [36mimport[39m { [33mFaArrowRight[39m[33m,[39m [33mFaMoon[39m[33m,[39m [33mFaSun[39m[33m,[39m [33mFaMicrophone[39m } [36mfrom[39m [32m'react-icons/fa'[39m[33m;[39m
+     [90m 7 |[39m [36mimport[39m speechHandler [36mfrom[39m [32m'./SpeechHandler'[39m[33m;[39m[0m
 
       at Runtime.createScriptFromCode (node_modules/jest-runtime/build/index.js:1728:14)
       at Object.<anonymous> (node_modules/framer-motion/dist/cjs/index.js:5:19)
-      at Object.<anonymous> (src/pages/HomePage.tsx:5:1)
+      at Object.<anonymous> (src/pages/HomePage.tsx:4:1)
       at Object.<anonymous> (src/App.tsx:5:1)
       at Object.<anonymous> (src/App.test.tsx:3:1)
       at TestScheduler.scheduleTests (node_modules/@jest/core/build/TestScheduler.js:333:13)
@@ -70,12 +70,12 @@ All files                 |       0 |        0 |       0 |       0 |
  src/pages                |       0 |        0 |       0 |       0 |                   
   DetectedObjectsPage.tsx |       0 |        0 |       0 |       0 | 19-196            
   FindObjectPage.tsx      |       0 |        0 |       0 |       0 | 19-209            
-  HomePage.tsx            |       0 |        0 |       0 |       0 | 15-308            
+  HomePage.tsx            |       0 |        0 |       0 |       0 | 10-258            
   SettingsPage.tsx        |       0 |      100 |       0 |       0 | 4-5               
   SpeechHandler.ts        |       0 |        0 |       0 |       0 | 16-68             
 --------------------------|---------|----------|---------|---------|-------------------
 Test Suites: 1 failed, 1 total
 Tests:       0 total
 Snapshots:   0 total
-Time:        3.073 s
+Time:        2.967 s
 Ran all test suites.
