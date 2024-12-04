@@ -1,43 +1,60 @@
 # Logs
-logs/
+logs
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # Runtime data
+pids
 *.pid
 *.pid.lock
 
 # Dependency directories
 node_modules/
 jspm_packages/
-node_modules/.cache/
-# Cache directories and files
-.npm/
-.cache/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
 .eslintcache
-*.tsbuildinfo
 
-# Environment files (keep these private)
-.env
+# Optional REPL history
+.node_repl_history
 
-# Build and distribution directories
-build/
-dist/
+# Output of `npm pack`
+*.tgz
 
-# Test coverage output
-coverage/
-
-# Lock files
+# Optional lock file for package managers
 package-lock.json
 yarn.lock
 
-# Editor and IDE settings
+# dotenv environment variables file (keep this private)
+.env
+
+# Your Google Cloud Vision credentials file
+config/tidal-eon-438722-v3-2611dd3a6b78.json
+
+# IDE/Editor directories and settings
 .vscode/
 .idea/
 
-# OS-generated files
+# OS generated files
 .DS_Store
 Thumbs.db
 
+# Build directories
+/build/
+dist/
+
+# Coverage directory for tests
+coverage/
+
 # Miscellaneous
-*.tmp
+*.sublime-workspace
 *.swp
+*.tmp
+
+# Optional TypeScript cache
+*.tsbuildinfo

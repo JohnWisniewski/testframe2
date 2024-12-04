@@ -1,11 +1,16 @@
 // src/pages/HomePage.tsx
-import { useNavigate } from 'react-router-dom';
-import React, { useState } from 'react';
+
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import styled, { ThemeProvider, createGlobalStyle } from 'styled-components';
-import { FaArrowRight, FaMoon, FaSun, FaMicrophone } from 'react-icons/fa';
-import speechHandler from './SpeechHandler';
-import { Link } from 'react-router-dom';
+import { FaArrowRight, FaMoon, FaSun } from 'react-icons/fa';
+// import axios from 'axios';
+
+// Importing Speech Recognition
+// Install with: npm install react-speech-recognition
+// import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+
 // Define light and dark themes
 const lightTheme = {
   background: '#FFFFFF',
@@ -23,7 +28,7 @@ const darkTheme = {
   cardBackground: '#1E1E1E',
 };
 
-// Global styles
+// Global styles to reset and apply basic styling
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
@@ -36,7 +41,7 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-// Styled Components
+// Styled components for layout and styling
 const Container = styled.div`
   overflow-x: hidden;
 `;
@@ -67,6 +72,10 @@ const Subtitle = styled(motion.p)`
   color: ${(props) => props.theme.color};
 `;
 
+const StyledLink = styled(Link)`
+  text-decoration: none;
+`;
+
 const Button = styled(motion.button)`
   margin-top: 2rem;
   padding: 1rem 2rem;
@@ -81,38 +90,9 @@ const Button = styled(motion.button)`
   outline: none;
 `;
 
-const DarkModeToggle = styled.button`
-  position: fixed;
-  top: 1rem;
-  right: 3rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: blue;
-  font-size: 1.5rem;
-  z-index: 1000;
-`;
-
-const VoiceControlToggle = styled.button`
-  position: fixed;
-  top: 1rem;
-  right: 6rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: blue;
-  font-size: 1.5rem;
-  z-index: 1000;
-`;
-
 const ContentSection = styled.section`
   padding: 4rem 2rem;
   background: ${(props) => props.theme.cardBackground};
-`;
-
-const SVGAnimation = styled(motion.svg)`
-  width: 100%;
-  height: auto;
 `;
 
 const CardGrid = styled.div`
@@ -133,6 +113,38 @@ const Card = styled(motion.div)`
   cursor: pointer;
 `;
 
+const DarkModeToggle = styled.button`
+  position: fixed;
+  top: 1rem;
+  right: 3rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: ${(props) => props.theme.color};
+  font-size: 1.5rem;
+  z-index: 1000;
+`;
+
+/*
+// Voice Control Toggle Button (Commented out to prevent linting errors)
+const VoiceControlToggle = styled.button`
+  position: fixed;
+  top: 1rem;
+  right: 6rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: ${(props) => props.theme.color};
+  font-size: 1.5rem;
+  z-index: 1000;
+`;
+*/
+
+const SVGAnimation = styled(motion.svg)`
+  width: 100%;
+  height: auto;
+`;
+
 const FutureSection = styled.section`
   padding: 4rem 2rem;
   background: ${(props) => props.theme.background};
@@ -140,55 +152,93 @@ const FutureSection = styled.section`
   text-align: center;
 `;
 
-const StyledLink = styled(Link)`
-  text-decoration: none;
-`;
-
 const HomePage: React.FC = () => {
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
-  const [voiceControl, setVoiceControl] = useState<boolean>(false);
-  const navigate = useNavigate();
+  const [theme, setTheme] = React.useState<'light' | 'dark'>('light');
+  const [data, setData] = React.useState<any[]>([]);
+  // const [voiceControl, setVoiceControl] = React.useState<boolean>(false);
 
   const toggleTheme = () => {
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
+  /*
   const toggleVoiceControl = () => {
     if (voiceControl) {
-      speechHandler.stopListening();
+      SpeechRecognition.stopListening();
     } else {
-      speechHandler.startListening((transcript) => {
-        console.log('Recognized Speech:', transcript);
-
-        const cleanedTranscript = transcript.replace(/[^\w]/g, '').toLowerCase();
-        if (
-          cleanedTranscript.includes('goto') &&
-          cleanedTranscript.includes('detectedobjects')
-        ) {
-          navigate('/detected-objects');
-        }
-      });
+      SpeechRecognition.startListening({ continuous: true });
     }
     setVoiceControl(!voiceControl);
   };
 
-  const data = [
+  // Voice Command Handling
+  const commands = [
     {
-      title: 'AI-Powered Image Descriptions',
-      description:
-        'Real-time descriptions of images powered by advanced AI.',
+      command: 'Go to *',
+      callback: (page: string) => {
+        if (page === 'detected objects') {
+          window.location.href = '/detected-objects';
+        }
+      },
     },
-    {
-      title: 'Voice-Controlled Navigation',
-      description:
-        'Navigate the entire website using simple voice commands.',
-    },
-    {
-      title: 'Haptic Feedback Integration',
-      description:
-        'Experience tactile responses when interacting with elements.',
-    },
+    // Add more commands as needed
   ];
+
+  const { transcript } = useSpeechRecognition({ commands });
+  */
+
+  // Fetch data from an API (Commented out to prevent errors)
+  /*
+  React.useEffect(() => {
+    axios
+      .get('/api/features')
+      .then((response) => {
+        setData(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+        // Use mock data in case of error
+        setData([
+          {
+            title: 'AI-Powered Image Descriptions',
+            description:
+              'Real-time descriptions of images and visual content powered by advanced AI.',
+          },
+          {
+            title: 'Voice-Controlled Navigation',
+            description:
+              'Navigate the entire website using simple voice commands.',
+          },
+          {
+            title: 'Haptic Feedback Integration',
+            description:
+              'Experience tactile responses when interacting with on-screen elements.',
+          },
+        ]);
+      });
+  }, []);
+  */
+
+  // Use mock data directly
+  React.useEffect(() => {
+    setData([
+      {
+        title: 'AI-Powered Image Descriptions',
+        description:
+          'Real-time descriptions of images and visual content powered by advanced AI.',
+      },
+      {
+        title: 'Voice-Controlled Navigation',
+        description:
+          'Navigate the entire website using simple voice commands.',
+      },
+      {
+        title: 'Haptic Feedback Integration',
+        description:
+          'Experience tactile responses when interacting with on-screen elements.',
+      },
+    ]);
+  }, []);
 
   return (
     <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
@@ -197,7 +247,8 @@ const HomePage: React.FC = () => {
         <DarkModeToggle onClick={toggleTheme} aria-label="Toggle Dark Mode">
           {theme === 'light' ? <FaMoon /> : <FaSun />}
         </DarkModeToggle>
-
+        {/* Voice Control Toggle Button (Commented out to prevent linting errors) */}
+        {/*
         <VoiceControlToggle
           onClick={toggleVoiceControl}
           aria-label="Toggle Voice Control"
@@ -206,7 +257,7 @@ const HomePage: React.FC = () => {
             style={{ color: voiceControl ? '#ff1744' : 'inherit' }}
           />
         </VoiceControlToggle>
-
+        */}
         <Header>
           <Title
             initial={{ opacity: 0, y: -50 }}
@@ -236,7 +287,6 @@ const HomePage: React.FC = () => {
             </Button>
           </StyledLink>
         </Header>
-
         <ContentSection>
           <SVGAnimation
             xmlns="http://www.w3.org/2000/svg"
@@ -269,7 +319,6 @@ const HomePage: React.FC = () => {
             ))}
           </CardGrid>
         </ContentSection>
-
         <FutureSection>
           <h2>What's to Come</h2>
           <p>
