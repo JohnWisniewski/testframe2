@@ -68,7 +68,7 @@ All files                 |       0 |        0 |       0 |       0 |
  src/components           |       0 |      100 |       0 |       0 |                   
   NavBar.tsx              |       0 |      100 |       0 |       0 | 6-29              
  src/pages                |       0 |        0 |       0 |       0 |                   
-  DetectedObjectsPage.tsx |       0 |        0 |       0 |       0 | 19-196            
+  DetectedObjectsPage.tsx |       0 |        0 |       0 |       0 | 19-195            
   FindObjectPage.tsx      |       0 |        0 |       0 |       0 | 19-209            
   HomePage.tsx            |       0 |        0 |       0 |       0 | 10-258            
   SettingsPage.tsx        |       0 |      100 |       0 |       0 | 4-5               
@@ -77,5 +77,5 @@ All files                 |       0 |        0 |       0 |       0 |
 Test Suites: 1 failed, 1 total
 Tests:       0 total
 Snapshots:   0 total
-Time:        2.967 s
+Time:        3.065 s
 Ran all test suites.
