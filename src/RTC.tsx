@@ -109,4 +109,3 @@ const RTC = forwardRef<any, RTCProps>(({ handleVisionResult }, ref) => {
 });
 
 export default RTC;
-
