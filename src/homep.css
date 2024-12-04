@@ -1,0 +1,123 @@
+/* General page styling */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #2e2e2e;
+    line-height: 1.6;
+    background-color: #f3f4f6;
+    margin: 0;
+  }
+  
+  /* Section Styling */
+  section {
+    padding: 80px 20px;
+    max-width: 1200px;
+    margin: auto;
+    text-align: center;
+  }
+  
+  /* Headings */
+  h2 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: #333;
+  }
+  
+  /* Card Grid Styling */
+  .card-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 20px;
+  }
+  
+  .card {
+    width: 300px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    padding: 25px;
+    text-align: left;
+  }
+  
+  .card:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+  }
+  
+  .card h2 {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+    color: #2e2e2e;
+  }
+  
+  .card p {
+    font-size: 1rem;
+    color: #6b7280;
+  }
+  
+  /* Button Styling */
+  button {
+    padding: 15px 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: #3b82f6; /* Soft blue */
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #2563eb; /* Darker blue on hover */
+  }
+  
+  .dark-mode-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #6b7280; /* Muted gray */
+    font-size: 24px;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .card-grid {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    section {
+      padding: 60px 10px;
+    }
+  }
+  
+  /* Additional Styling for Dark Mode (Optional) */
+  body.dark-mode {
+    background-color: #1f2937; /* Darker background for dark mode */
+    color: #d1d5db; /* Light gray text */
+  }
+  
+  body.dark-mode .card {
+    background-color: #374151; /* Dark gray card */
+    color: #d1d5db;
+    box-shadow: none; /* Minimal shadow in dark mode */
+  }
+  
+  body.dark-mode button {
+    background-color: #2563eb;
+  }
+  
+  body.dark-mode button:hover {
+    background-color: #1e40af; /* Even darker on hover */
+  }
+  
+  body.dark-mode .dark-mode-toggle {
+    color: #9ca3af; /* Light gray for dark mode toggle */
+  }
+  
